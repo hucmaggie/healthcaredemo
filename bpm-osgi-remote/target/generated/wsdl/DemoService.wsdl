@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="DemoService" targetNamespace="http://demo.kiefuse.jboss.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://demo.kiefuse.jboss.org/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://demo.kiefuse.jboss.org/" elementFormDefault="unqualified" targetNamespace="http://demo.kiefuse.jboss.org/" version="1.0">
+<xs:element name="deployableService" type="tns:deployableService"/>
+<xs:element name="error" type="tns:error"/>
+<xs:element name="notification" type="tns:notification"/>
+<xs:element name="order" type="tns:order"/>
+<xs:element name="processRequest" type="tns:processRequest"/>
+<xs:element name="processRequestResponse" type="tns:processRequestResponse"/>
+<xs:element name="validateIP" type="tns:validateIP"/>
+<xs:element name="validateIPResponse" type="tns:validateIPResponse"/>
+<xs:element name="validateInventory" type="tns:validateInventory"/>
+<xs:element name="validateInventoryResponse" type="tns:validateInventoryResponse"/>
+<xs:complexType name="processRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="processRequestResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="validateIP">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="tns:order"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="order">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ipAddress" type="xs:string"/>
+      <xs:element minOccurs="0" name="jobType" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="notifcation" type="tns:notification"/>
+      <xs:element minOccurs="0" name="prodcutName" type="xs:string"/>
+      <xs:element minOccurs="0" name="prodcutid" type="xs:string"/>
+      <xs:element minOccurs="0" name="service" type="tns:deployableService"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="notification">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="department" type="xs:string"/>
+      <xs:element minOccurs="0" name="description" type="xs:string"/>
+      <xs:element minOccurs="0" name="emailid" type="xs:string"/>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+      <xs:element minOccurs="0" name="type" type="xs:string"/>
+      <xs:element minOccurs="0" name="userid" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="deployableService">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="id" type="xs:string"/>
+      <xs:element minOccurs="0" name="name" type="xs:string"/>
+      <xs:element minOccurs="0" name="netWorkstate" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="validateIPResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="validateInventory">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="tns:order"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="validateInventoryResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="error">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="errorCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="errorType" type="xs:string"/>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="validateInventoryResponse">
+    <wsdl:part name="parameters" element="tns:validateInventoryResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="processRequestResponse">
+    <wsdl:part name="parameters" element="tns:processRequestResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="processRequest">
+    <wsdl:part name="parameters" element="tns:processRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="validateInventory">
+    <wsdl:part name="parameters" element="tns:validateInventory">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="validateIPResponse">
+    <wsdl:part name="parameters" element="tns:validateIPResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="validateIP">
+    <wsdl:part name="parameters" element="tns:validateIP">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="DemoService">
+    <wsdl:operation name="processRequest">
+      <wsdl:input name="processRequest" message="tns:processRequest">
+    </wsdl:input>
+      <wsdl:output name="processRequestResponse" message="tns:processRequestResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="validateIP">
+      <wsdl:input name="validateIP" message="tns:validateIP">
+    </wsdl:input>
+      <wsdl:output name="validateIPResponse" message="tns:validateIPResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="validateInventory">
+      <wsdl:input name="validateInventory" message="tns:validateInventory">
+    </wsdl:input>
+      <wsdl:output name="validateInventoryResponse" message="tns:validateInventoryResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="DemoServiceSoapBinding" type="tns:DemoService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="processRequest">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="processRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="processRequestResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="validateIP">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="validateIP">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="validateIPResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="validateInventory">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="validateInventory">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="validateInventoryResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="DemoService">
+    <wsdl:port name="DemoServicePort" binding="tns:DemoServiceSoapBinding">
+      <soap:address location="http://localhost:9090/DemoServicePort"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+~ Copyright (C) Red Hat, Inc.
+~ http://www.redhat.com
+~
+~ Licensed under the Apache License, Version 2.0 (the "License");
+~ you may not use this file except in compliance with the License.
+~ You may obtain a copy of the License at
+~
+~    http://www.apache.org/licenses/LICENSE-2.0
+~
+~ Unless required by applicable law or agreed to in writing, software
+~ distributed under the License is distributed on an "AS IS" BASIS,
+~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+~ See the License for the specific language governing permissions and
+~ limitations under the License.
+-->
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xmlns:cxf="http://cxf.apache.org/blueprint/core"
+           xmlns:camel-cxf="http://camel.apache.org/schema/blueprint/cxf"
+           xmlns:camel="http://camel.apache.org/schema/blueprint"
+           xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:jaxws="http://cxf.apache.org/blueprint/jaxws"
+           xmlns:jaxrs="http://cxf.apache.org/blueprint/jaxrs"
+           xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+                               http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd
+                               http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0 http://aries.apache.org/schemas/blueprint-cm/blueprint-cm-1.1.0.xsd
+                               http://cxf.apache.org/blueprint/core http://cxf.apache.org/schemas/blueprint/core.xsd
+                               http://camel.apache.org/schema/blueprint/cxf http://camel.apache.org/schema/blueprint/cxf/camel-cxf.xsd
+                               http://cxf.apache.org/blueprint/jaxrs http://cxf.apache.org/schemas/blueprint/jaxrs.xsd
+                               http://cxf.apache.org/blueprint/jaxws http://cxf.apache.org/schemas/blueprint/jaxws.xsd">
+
+    <cm:property-placeholder persistent-id="org.jboss.kiefuse.demo" update-strategy="reload" xmlns="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0">
+    <default-properties>
+         <property name="prescription.path" value="/Users/JeyPaulraj/development/bpm-fuse/input"/>
+         <property name="prescriptionRule.path" value="/Users/JeyPaulraj/development/bpm-fuse/rule/input"/>
+         <property name="ordersubmission.path" value="/Users/JeyPaulraj/poc/camcost/input"/>
+    </default-properties>
+  </cm:property-placeholder>
+ <!--  camel-cxf:cxfEndpoint id="DemoService" 
+                         address="http://localhost:7009/web-service/demoService" 
+                         serviceClass="org.jboss.kiefuse.demo.DemoService">
+   
+  </camel-cxf:cxfEndpoint-->
+  <jaxws:endpoint id="DemoService"
+                    implementor="org.jboss.kiefuse.demo.DemoServiceImpl"
+                    address="/web-service/demoService"/>
+  
+   <!-- JAX-RS -->
+   <bean id="ticketingSrv" class="org.jboss.kiefuse.demo.TicketingRestService" />
+  <jaxrs:server id="ticketingService" address="/rest">
+    <jaxrs:serviceBeans>
+      <ref component-id="ticketingSrv" />
+    </jaxrs:serviceBeans>
+  </jaxrs:server>          
+<bean id="orderSrv" class="org.jboss.kiefuse.demo.OrderRestService" />
+  <jaxrs:server id="orderService" address="/order">
+    <jaxrs:serviceBeans>
+      <ref component-id="orderSrv" />
+    </jaxrs:serviceBeans>
+  </jaxrs:server>       
+  <bean id="processRequest" class="org.jboss.kiefuse.demo.ProcessRestOperation"/>
+  <bean id="processComcastRequest" class="org.jboss.kiefuse.demo.ComcastProcessRestOperation"/>    
+    <!--  argument value="${orderWorkflow.deploymentId}"/>
+    <argument value="${orderWorkflow.processId}"/>
+    <argument value="${orderWorkflow.baseUrl}"/>
+    <argument value="${orderWorkflow.username}"/>
+    <argument value="${orderWorkflow.password}"/-->
+ 
+  <!--  bean id="processRule" class="org.jboss.kiefuse.demo.RuleExecuter">
+      </bean-->
+  <bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent">
+        <!-- vm://myBroker is the vm protocol, and myBroker is the broker name -->
+        <property name="brokerURL" value="vm://amq"/>
+        <property name="userName" value="admin"/>
+        <property name="password" value="admin"/>
+    </bean>
+    <bean id="processShipping" class="org.jboss.kiefuse.demo.ProcessShipping">
+        
+    </bean>
+
+  <camelContext trace="true" id="bpmfuseint" xmlns="http://camel.apache.org/schema/blueprint">
+    <dataFormats>
+        <xstream encoding="UTF-8" id="xstream-utf8"/>
+        <xstream id="xstream-default"/>
+        <jaxb contextPath="com.healthcare.casemgt" id="jaxb"/>
+        <!--jaxb contextPath="com.order.process" id="jaxb"/-->
+    </dataFormats>
+    <route id="prescriptionRequest">
+        <from uri="file://{{prescription.path}}/prescriptionOrder?delete=true"/>
+        <to uri="log:org.jboss.poc.order?level=INFO&amp;showAll=true"/>
+        <unmarshal ref="jaxb"/>
+        <to uri="bean:processRequest?method=startProcess(${body})"/>
+    </route>
+    <!--route id="comCastOrderProcessRequest">
+        <from uri="file://{{ordersubmission.path}}/order?delete=true"/>
+        <to uri="log:org.jboss.poc.order?level=INFO&amp;showAll=true"/>
+        <unmarshal ref="jaxb"/>
+        <to uri="bean:processComcastRequest?method=startProcess(${body})"/>
+    </route-->
+    <route id="Shipping">
+        <description>route id="processRuleRequest"&gt;
+        &lt;from uri="file://{{prescriptionRule.path}}/prescriptionOrder?delete=true"/&gt;
+        
+      &lt;to uri="log:org.jboss.poc.order?level=INFO&amp;amp;showAll=true"/&gt;
+      &lt;unmarshal ref="jaxb"/&gt;
+      &lt;to uri="bean:processRule?method=executeRule(${body})"/&gt;
+    &lt;/route</description>
+        <from uri="activemq:queue:send"/>
+        <unmarshal ref="jaxb"/>
+        <to uri="log:org.jboss.poc.order?level=INFO&amp;showAll=true"/>
+        <to uri="bean:processShipping?method=process(${body})"/>
+        <choice>
+            <when>
+                <simple>${body.state} != 'WI'</simple>
+                <delay>
+                    <constant>10000</constant>
+                </delay>
+                <marshal ref="jaxb"/>
+                <to uri="activemq:queue:receive"/>
+            </when>
+            <otherwise>
+                <marshal ref="jaxb"/>
+                <to uri="activemq:queue:receive"/>
+            </otherwise>
+        </choice>
+    </route>
+</camelContext>
+
+</blueprint>

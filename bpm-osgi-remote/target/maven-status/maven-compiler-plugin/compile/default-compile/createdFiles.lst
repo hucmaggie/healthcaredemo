@@ -1,0 +1,9 @@
+org/jboss/kiefuse/demo/WSTest.class
+org/jboss/kiefuse/demo/TicketingRestService.class
+org/jboss/kiefuse/demo/DemoService.class
+org/jboss/kiefuse/demo/ProcessRestOperation.class
+org/jboss/kiefuse/demo/ProcessShipping.class
+org/jboss/kiefuse/demo/ComcastProcessRestOperation.class
+org/jboss/kiefuse/demo/DemoServiceImpl.class
+org/jboss/kiefuse/demo/RestApi.class
+org/jboss/kiefuse/demo/OrderRestService.class

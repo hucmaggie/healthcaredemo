@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+~ Copyright (C) Red Hat, Inc.
+~ http://www.redhat.com
+~
+~ Licensed under the Apache License, Version 2.0 (the "License");
+~ you may not use this file except in compliance with the License.
+~ You may obtain a copy of the License at
+~
+~    http://www.apache.org/licenses/LICENSE-2.0
+~
+~ Unless required by applicable law or agreed to in writing, software
+~ distributed under the License is distributed on an "AS IS" BASIS,
+~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+~ See the License for the specific language governing permissions and
+~ limitations under the License.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  
+  <modelVersion>4.0.0</modelVersion>
+
+  <!--  parent>
+    <groupId>org.jboss.poc</groupId>
+    <artifactId>dg-poc</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+  </parent-->  
+  
+    <groupId>org.jboss.bpmsfuseint</groupId>
+
+    <artifactId>bpm-fuse-integration</artifactId>
+    <version>1.0</version>
+  	<packaging>bundle</packaging>
+  
+  <name>Bpm Fuse integration</name>
+<properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    
+    <camel.version>2.12.0.redhat-610379</camel.version>
+    <cxf.version>2.7.0.redhat-610379</cxf.version>
+    <activemq.version>5.9.0.redhat-610379</activemq.version>
+    <spring.version>3.2.8.RELEASE</spring.version>
+    <slf4j.version>1.6.6</slf4j.version>
+    <derby.version>10.10.1.1</derby.version>
+    <kie.version>6.1.0.Final</kie.version>
+    <jaxb.version>2.2.7</jaxb.version>
+  </properties>
+
+  <repositories>
+    <repository>
+      <id>fusesource.releases</id>
+      <name>FuseSource Release Repository</name>
+      <url>http://repository.jboss.org/nexus/content/repositories/fs-public</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>fusesource.releases</id>
+      <name>FuseSource Release Repository</name>
+      <url>http://repository.jboss.org/nexus/content/repositories/fs-public</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </pluginRepository>
+  </pluginRepositories>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.apache.camel</groupId>
+        <artifactId>camel-core</artifactId>
+        <version>${camel.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.camel</groupId>
+        <artifactId>camel-blueprint</artifactId>
+        <version>${camel.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.camel</groupId>
+        <artifactId>camel-jms</artifactId>
+        <version>${camel.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.camel</groupId>
+        <artifactId>camel-sql</artifactId>
+        <version>${camel.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.camel</groupId>
+        <artifactId>camel-groovy</artifactId>
+        <version>${camel.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.activemq</groupId>
+        <artifactId>activemq-camel</artifactId>
+        <version>${activemq.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.activemq</groupId>
+        <artifactId>activemq-client</artifactId>
+        <version>${activemq.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.derby</groupId>
+        <artifactId>derbyclient</artifactId>
+        <version>${derby.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.camel</groupId>
+        <artifactId>camel-cxf</artifactId>
+        <version>2.4.3</version>
+      </dependency>
+      <dependency>
+  <groupId>org.apache.camel</groupId>
+  <artifactId>camel-xstream</artifactId>
+  <version>${camel.version}</version>
+  <!-- use the same version as your Camel core version -->
+</dependency>
+      <dependency>
+        <groupId>org.kie.remote</groupId>
+        <artifactId>kie-services-client</artifactId>
+        <version>${kie.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.sun.xml.bind</groupId>
+        <artifactId>jaxb-impl</artifactId>
+        <version>${jaxb.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>${slf4j.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-simple</artifactId>
+        <version>${slf4j.version}</version>
+      </dependency>
+    </dependencies>
+    
+  </dependencyManagement>
+  
+  <dependencies>
+  
+    <dependency>
+      <groupId>org.apache.camel</groupId>
+      <artifactId>camel-core</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.camel</groupId>
+      <artifactId>camel-blueprint</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <!--  dependency>
+      <groupId>org.apache.camel</groupId>
+      <artifactId>camel-cxf</artifactId>
+      <scope>runtime</scope>
+    </dependency-->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.kie.remote</groupId>
+      <artifactId>kie-services-client</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.xml.bind</groupId>
+      <artifactId>jaxb-impl</artifactId>
+    </dependency>
+    <dependency>
+	<groupId>org.apache.httpcomponents</groupId>
+	<artifactId>httpclient</artifactId>
+	<version>4.3.5</version>
+</dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+       <groupId>com.comcast.process.domain</groupId>
+  	   <artifactId>comcast-domain</artifactId>
+       <version>1.0</version>
+    </dependency> 
+    <dependency>
+       <groupId>com.healthcare.casemgt</groupId>
+  	   <artifactId>healthcareRule</artifactId>
+       <version>1.0</version>
+    </dependency> 
+   
+    
+    <dependency>
+       <groupId>com.healthcare.demo.domain</groupId>
+  	   <artifactId>healthcare-domain</artifactId>
+       <version>1.0</version>
+    </dependency>  
+    
+  <dependency>
+            <groupId>org.apache.geronimo.specs</groupId>
+            <artifactId>geronimo-ws-metadata_2.0_spec</artifactId>
+            <version>1.1.2</version>
+            </dependency>
+            
+      
+     <!--  dependency>
+	<groupId>org.jboss.resteasy</groupId>
+	<artifactId>resteasy-jaxrs</artifactId>
+	<version>2.3.1.GA</version>
+</dependency-->
+
+     <dependency>
+       <groupId>com.sun.xml.bind</groupId>
+      <artifactId>jaxb-impl</artifactId>
+      <version>2.2.7</version>
+	     </dependency>
+  </dependencies>
+   
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <extensions>true</extensions>
+        <configuration>
+          <instructions>
+            <Export-Package>!*</Export-Package>
+            <Import-Package>
+            javax.ws.rs,
+            javax.ws.rs.core,
+              javax.jws,
+              javax.wsdl,
+              javax.xml.namespace,
+              org.apache.cxf.helpers,
+              org.osgi.service.blueprint,
+              com.healthcare.casemgt,com.order.process,
+              *;resolution:="optional"
+            </Import-Package>
+            <Embed-Dependency>*;scope=compile|runtime;artifactId=kie*|jbpm*|resteasy*|jaxrs*|drools*|httpcore*|httpclient*|jackson*|jaxb*</Embed-Dependency>
+            <Embed-Transitive>true</Embed-Transitive>
+          </instructions>
+        </configuration>
+      </plugin>
+      <plugin>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-java2ws-plugin</artifactId>
+                <version>2.6.6</version>
+                <executions>
+                    <execution>
+                        <id>process-classes</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>java2ws</goal>
+                        </goals>
+                        <configuration>
+                            <className>org.jboss.kiefuse.demo.DemoService</className>
+                            <genWsdl>true</genWsdl>
+                            <attachWsdl>false</attachWsdl>
+                            <verbose>true</verbose>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+    </plugins>
+  </build>
+
+</project>
